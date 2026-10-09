@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Iniciar sesion</title>
+     <%- include('Partials/head') %>
+</head>
+
+<body class="login">
+
+<!--Barra de Navegacion-->  
+
+     <%- include('Partials/navegation') %>
+
+      <!-- Contenedor principal unificado que centra todo vertical y horizontal--> 
+     <main class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+      
+       <div class="login-card p-4 bg-darkrounded shadow-ig" style="width: 100%; max-width: 400px;">
+         
+          <!--Tarjeta de login-->
+           <div class="login-card p-4 bg-white rounded shadow-ig" style="width: 100%; max-width: 400px;">
+         
+            <!--Formulario principal-->
+             <form action="/login" method="post">
+              <% if (mensaje) { %>
+              <div class="error"><%= mensaje %></div>
+              <% } %>
+            
+             <div class="mb-3">
+                <input type="text" class="form-control" name="usuario" placeholder="Usuario" required>
+             </div>
+
+             <div class="mb-3">
+                <input type="password" class="form-control" name="contrasena" placeholder="Contraseña" required>
+             </div>
+
+             <div class="d-flex justify-content-between gap-2 mb-3">
+                <a href="/registro"class="btn btn-ontline-dark w-50 rounded-pill">Crear Usuario</a>
+                <button type="submit" class="btn btn-primary w-50 rounded-pill">Ingresar</button>
+             </div>
+
+             <div>
+                <button type="reset" class="btn btn-info w-50 rounded-pill">Limpiar</button>
+             </div>
+            </form>
+
+         <!--Enlaces de recuperacion-->
+         <div class="links text-center mt-3 d-flex flex-column gap-1">
+            <a href="/recuperar-password" class="text-decoration-none">Restablecer Contraseña</a>
+            <a href="/recordar-usuario" class="text-decoration-none">Recordar Usuario</a>
+         </div>   
+
+          </div>
+
+       </div>
+     </main>
+
+     <%- include('Partials/footer') %>
+</body>
+</html>

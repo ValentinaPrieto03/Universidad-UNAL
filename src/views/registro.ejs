@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Registro por Pasos</title>
+  
+     <%- include('Partials/head') %>
+     <style>
+      .oculto { display: none !important; }
+      /* Estilos básicos para las secciones de pasos */
+      .paso-sesion { margin-top: 20px; }
+     </style>
+</head>
+
+<body>
+     <%- include('Partials/navegation') %>
+     <main class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+
+        <div class="container mt-5">
+            <h1>Bienvenidos Vista de creación de Usuario</h1>
+            <h2>Gestión de Usuario</h2>
+
+            <!-- Mensaje de error desde el backend -->
+            <% if (error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+        
+             <!-- FORMULARIO ÚNICO (Se corrigió la ruta para que coincida con el backend) -->
+             <form action="/registro" method="post" id="formRegistro">
+
+               <!-- PASO 1 -->
+               <div id="paso-1" class="paso-sesion">
+                   <h4>1. Datos personales (Identificación)</h4>
+                   <div class="mb-3">
+                      <label>Tipo de documento</label>
+                      <select name="tipoDocumento" class="form-control" id="tipoDocumento" required>
+                         <option value="CEDULA">CEDULA DE CIUDADANIA</option>
+                         <option value="TI">TARJETA DE IDENTIDAD</option>
+                         <option value="CE">CEDULA DE EXTRANJERIA</option>
+                      </select>
+                   </div>
+                   <div class="mb-3">
+                       <label>Número del documento</label> <!-- Se corrigió "Nombre" por "Número" -->
+                       <!-- Se corrigió el name e id a "numeroDocumento" -->
+                       <input type="text" name="numeroDocumento" class="form-control" id="numeroDocumento" placeholder="Digite su cédula" required>
+                   </div>
+                   <!-- Se corrigió bnt por btn -->
+                   <button type="button" class="btn btn-primary" onclick="siguientepaso(2)">Validar</button>
+               </div>
+
+
+               <!-- PASO 2 (Se añadió la clase 'oculto' para que no se muestre al inicio) -->
+               <div id="paso-2" class="paso-sesion oculto">
+                <h4>2. Datos personales y Nombres</h4>
+                <p class="text-muted">Ingrese sus Nombres y Apellidos tal como aparecen en su documento de identificación</p>
+
+                <div class="row">
+                  <label class="mb-2">Digite su Nombre Completo</label>
+                  <div class="col-md-6 mb-3">
+                    <input type="text" name="primerNombre" class="form-control" id="primerNombre" placeholder="Digite su Primer Nombre" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <input type="text" name="segundoNombre" class="form-control" id="segundoNombre" placeholder="Digite su Segundo Nombre">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <input type="text" name="primerApellido" class="form-control" id="primerApellido" placeholder="Digite su Primer Apellido" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <input type="text" name="segundoApellido" class="form-control" id="segundoApellido" placeholder="Digite su Segundo Apellido" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label>Fecha de Nacimiento</label>
+                   <input type="date" name="fechaNacimiento" class="form-control" id="fechaNacimiento" required>
+                </div>
+               
+                <button type="button" class="btn btn-secondary" onclick="pasoAnterior(1)">Atras</button>
+                <button type="button" class="btn btn-primary" onclick="siguientepaso(3)">Continuar</button>
+              </div>
+
+                
+               <!-- PASO 3 (Se añadió la clase 'oculto') -->
+               <div id="paso-3" class="paso-sesion oculto">
+                <h4>3. Correo Electrónico</h4>
+                <div class="mb-3">
+                  <label>Correo Electrónico</label>
+                   <!-- Se corrigió name="Correo" a "correo" (minúscula) -->
+                   <input type="email" name="correo" class="form-control" id="correo" placeholder="correo@gmail.com" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label>Confirmar Correo Electrónico</label>
+                   <input type="email" name="confirmarCorreo" class="form-control" id="confirmarCorreo" placeholder="Por favor confirmar correo electrónico" required>
+                </div>
+                 
+                <button type="button" class="btn btn-secondary" onclick="pasoAnterior(2)">Atras</button>
+                <!-- Se cambió type="button" a "submit" para que envíe el formulario -->
+                <button type="submit" class="btn btn-success">Finalizar Registro</button>
+               </div>
+
+             </form>
+         </div>
+     </main>
+
+    <%- include('Partials/footer') %>
+
+    <!-- Script de control corregido -->
+    <script>
+      function ocultarTodosLosPasos() {
+        document.getElementById('paso-1').classList.add('oculto');
+        document.getElementById('paso-2').classList.add('oculto');
+        document.getElementById('paso-3').classList.add('oculto');
+      }
+
+      function siguientepaso(pasoDestino){
+        // Validación del Paso 1 al avanzar al Paso 2
+        if(pasoDestino === 2){
+          const doc = document.getElementById('numeroDocumento').value;
+          if (!doc) { // <-- Corregido: "Si NO hay documento"
+            alert('Por favor ingrese el número de documento');
+            return;
+          }
+        }
+
+        // Validación del Paso 2 al avanzar al Paso 3
+        if(pasoDestino === 3){
+          const primerNombre = document.getElementById('primerNombre').value;
+          const primerApellido = document.getElementById('primerApellido').value;
+          const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+          
+          if (!primerNombre || !primerApellido || !fechaNacimiento) {
+            alert('Por favor complete los campos obligatorios del paso 2');
+            return;
+          }
+        }
+
+        ocultarTodosLosPasos();
+        document.getElementById('paso-' + pasoDestino).classList.remove('oculto'); // <-- Corregido "ddocument"
+      }
+
+      function pasoAnterior(pasoDestino){
+         ocultarTodosLosPasos();
+         document.getElementById('paso-' + pasoDestino).classList.remove('oculto'); // <-- Corregido ocultado repetido
+      }
+    </script>
+</body>
+</html>
